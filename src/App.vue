@@ -1,47 +1,67 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+  import { reactive } from 'vue';
+  import Cabecalho from './components/Cabecalho.vue';
+  import Formulario from './components/Formulario.vue';
+  import Rodape from './components/Rodape.vue';
+
+
+const estado = reactive({
+  numero1: 0,
+  numero2: 0,
+  resultado: 0,
+  operador: 'somar',
+})
+
+function getNumber1(evento){
+  estado.numero1 = parseFloat(evento.target.value) || 0;
+  getOperacao();
+}
+
+function getNumber2(evento){
+  estado.numero2 = parseFloat(evento.target.value) || 0;
+  getOperacao();
+}
+
+function getOperador(evento){
+  estado.operador = evento.target.value;
+  getOperacao();
+}
+
+const getOperacao = () => {
+  switch (estado.operador){
+    case 'subtract':
+      estado.resultado = estado.numero1 - estado.numero2;
+      break;
+    case 'add': estado.resultado = estado.numero1 + estado.numero2;
+      break;
+    case 'divide':
+      estado.resultado = estado.numero2 !== 0 ? estado.numero1 / estado.numero2 : "Digite um divisor diferente de 0"
+      break;
+    case 'multiply':
+      estado.resultado = estado.numero1 * estado.numero2;
+      break;
+  }
+};
+
+
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div class="container">
+    <Cabecalho />
+    <Formulario 
+      :get-Number1="getNumber1" 
+      :get-Number2="getNumber2"
+      :get-Operador="getOperador"     
+      :resultado="estado.resultado"
+      />
+    <Rodape /> 
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
